@@ -7,9 +7,10 @@ class ProfilesController < ApplicationController
   end
 
   def show
-    @profiles = Profile.where.not(user_id: current_user.id) # Exclude the current user's profile
-    @profiles = @profiles.where.not(user_id: current_user.friends.pluck(:id)) if current_user.friends.any?
-    @friend_count = current_user.friends.count
+    @all_profiles = Profile.where.not(user_id: current_user.id)
+    @request_sender_ids = Friendship.where(friend_id: current_user.id, status: 'pending').pluck(:user_id)
+    @profiles = @all_profiles.where.not(user_id: @request_sender_ids)
+    @friend_count = current_user.friendships.where(status: 'accepted').count
   end
 
   def edit
@@ -19,7 +20,6 @@ class ProfilesController < ApplicationController
     if @profile.update(profile_params)
       if params[:profile][:profile_picture]
         uploaded_file = params[:profile][:profile_picture]
-        p uploaded_file
         cloudinary_response = Cloudinary::Uploader.upload(uploaded_file, :transformation => [
           {:width => 800, :height => 800, :crop => :limit}, # Resize to fit within 800x800
           {:quality => "auto:low"} # Automatically adjust quality for compression
@@ -33,8 +33,8 @@ class ProfilesController < ApplicationController
   end
 
   def send_friend_request
-    friend = User.find(params[:id])
-    friendship = current_user.friendships.build(friend: friend, status: 'pending')
+    friend = current_user
+    friendship = User.find(params[:id]).friendships.build(friend: friend, status: 'pending')
     p "******#{friend}"
     p "*****#{friendship.inspect}"
     if friendship.save

@@ -8,7 +8,6 @@
       <% @friend_requests.each do |request| %>
         <li class="mb-4">
           <div class="bg-white p-4 rounded-lg shadow-lg flex items-center justify-between">
-
             <div class="flex items-center">
               <!-- Display friend's profile picture -->
               <img src="<%= cl_image_path(request.friend.profile.profile_picture_public_id, width: 64, height: 64, crop: :fill) if request.friend.profile.profile_picture_public_id.present? %>" alt="Profile Picture" class="w-10 h-10 rounded-full mr-4">
