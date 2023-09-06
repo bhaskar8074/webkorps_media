@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get 'friends/create'
   get 'friends/destroy'
+  get "friends" => "friends#friends"
   devise_for :users
   resource :profile, only: [ :show, :edit, :update] do
     member do

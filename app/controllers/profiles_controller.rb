@@ -9,9 +9,11 @@ class ProfilesController < ApplicationController
   def show
     @all_profiles = Profile.where.not(user_id: current_user.id)
     @request_sender_ids = Friendship.where(friend_id: current_user.id, status: 'pending').pluck(:user_id)
-    @profiles = @all_profiles.where.not(user_id: @request_sender_ids)
-    @friend_count = current_user.friendships.where(status: 'accepted').count
-  end
+    @accepted_request_sender_ids = Friendship.where(friend_id: current_user.id, status: 'accepted').pluck(:user_id)
+    @exclude_ids = @request_sender_ids + @accepted_request_sender_ids
+    @profiles = @all_profiles.where.not(user_id: @exclude_ids)
+    @friend_count = current_user.friendships.where(status: "accepted").count
+  end 
 
   def edit
   end

@@ -1,8 +1,17 @@
 class FriendsController < ApplicationController
   before_action :authenticate_user!
 
+  def friends
+    @friends_ids= current_user.friendships.where(status: "accepted").pluck(:friend_id)
+    p "*********************************************#{@friends_ids.inspect}"
+    @user_profiles = Profile.where(user_id: @friends_ids)
+    
+  end
+
   def accept_friend_request
     friendship = current_user.friendships.find(params[:id])
+    reverse_friendship = friendship.friend.friendships.build(friend: current_user, status: 'accepted')
+    reverse_friendship.save
     friendship.update(status: 'accepted')
     flash[:notice] = "You are now friends with #{friendship.friend.profile.first_name}."
     redirect_to friend_requests_friends_path
