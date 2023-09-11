@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
           "(sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)",
           current_user.id, @receiver.id, @receiver.id, current_user.id
         ).order(created_at: :asc)
-        p "******    #{@messages.inspect}"
+        # p "******    #{@messages.inspect}"
     end
 
     def create
