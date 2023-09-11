@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :messages, only: [:create, :show, :destroy]
+
   resources :friends do
     get :friend_requests, on: :collection
     post :accept_friend_request, on: :member

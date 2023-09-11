@@ -1,31 +1,29 @@
-<%= render "shared/header" %>
+<%=render "shared/header"%>
 
 <div class="p-4">
-  <h1 class="text-2xl font-semibold mb-4 text-center">Friend Requests</h1>
+  <h1 class="text-2xl font-semibold mb-4">Friend Requests</h1>
 
   <% if @friend_requests.any? %>
     <ul>
       <% @friend_requests.each do |request| %>
-        <li class="mb-4">
-          <div class="bg-white p-4 rounded-lg shadow-lg flex items-center justify-between">
-            <div class="flex items-center">
-              <!-- Display friend's profile picture -->
-              <img src="<%= cl_image_path(request.friend.profile.profile_picture_public_id, width: 64, height: 64, crop: :fill) if request.friend.profile.profile_picture_public_id.present? %>" alt="Profile Picture" class="w-10 h-10 rounded-full mr-4">
-              
-              <!-- Display friend's name -->
-              <span class="text-lg"><%= request.friend.profile.first_name %></span>
-            </div>
+        <li class="mb-2">
+          <div class="flex items-center">
+            <!-- Display friend's profile picture -->
+            <img src="<%= cl_image_path(request.friend.profile.profile_picture_public_id, width: 64, height: 64, crop: :fill) if request.friend.profile.profile_picture_public_id.present? %>" alt="Profile Picture" class="w-10 h-10 rounded-full mr-2">
+            
+            <!-- Display friend's name -->
+            <span class="text-lg"><%= request.friend.profile.first_name %></span>
 
-            <!-- Right side with buttons -->
-            <div class="flex items-center">
+            <!-- Buttons for accepting and rejecting friend requests -->
+            <div class="ml-auto flex items-center">
               <%= button_to 'Accept', accept_friend_request_friend_path(request), method: :post, class: 'bg-green-500 text-white py-2 px-4 rounded-full mr-2' %>
-              <%= button_to 'Reject', reject_friend_request_friend_path(request), method: :delete, class: 'bg-red-500 text-white py-2 px-4 rounded-full' %>
+              <%= button_to 'Reject', reject_friend_request_friend_path(request), method: :delete, class: 'bg-red-500 text-white py-2 px-4 rounded-full mr-2' %>
             </div>
           </div>
         </li>
       <% end %>
     </ul>
   <% else %>
-    <p class="text-center">No pending friend requests.</p>
+    <p>No pending friend requests.</p>
   <% end %>
 </div>

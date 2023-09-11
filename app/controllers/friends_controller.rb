@@ -29,7 +29,7 @@ class FriendsController < ApplicationController
     friendship = current_user.friendships.find_by(friend_id: friend.id)
 
     if friendship&.destroy
-      flash[:notice] = "Removed #{friendship.friend.profile.first_namefriend.name} from your friends."
+      flash[:notice] = "Removed #{friendship.friend.profile.first_name} from your friends."
     else
       flash[:alert] = "Unable to remove friend."
     end
@@ -40,7 +40,6 @@ class FriendsController < ApplicationController
     @friend_requests = Friendship.all.where(status: 'pending', user_id: current_user.id)
     p current_user.friendships.inspect
     puts "Current User ID: #{current_user.id}"
-    puts @friend_requests.to_sql
     p @friend_requests
   end
 end

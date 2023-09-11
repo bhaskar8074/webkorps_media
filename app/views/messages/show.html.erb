@@ -1,0 +1,19 @@
+
+<%=render "shared/header"%>
+<div class="flex justify-center items-center h-screen">
+  <div class="max-w-md w-full bg-white shadow-md rounded-lg p-4">
+    <h2 class="text-lg font-semibold mb-4">Chat with <%= @receiver.profile.first_name%></h2>
+
+    <div id="messages" class="space-y-2">
+      <% @messages.each do |message| %>
+        <div class="<%= message.sent_by_current_user?(current_user) ? 'self-end' : 'self-start' %> bg-gray-200 rounded-lg p-2">
+          <p><%= message.content %></p>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-4">
+      <%= render 'form' %>
+    </div>
+  </div>
+</div>
