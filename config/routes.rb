@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   get 'friends/create'
   get 'friends/destroy'
   get "friends" => "friends#friends"
+  get "users" => "user#index"
+  delete '/user/:id', to: 'user#destroy', as: 'delete_user'
   devise_for :users
   resource :profile, only: [ :show, :edit, :update] do
     member do

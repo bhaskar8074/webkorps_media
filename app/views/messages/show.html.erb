@@ -6,7 +6,7 @@
     <div id="messages" class="max-h-96 overflow-y-auto">
       <!-- Add max height and overflow-y-auto for scrolling -->
       <% @messages.each do |message| %>
-        <div class="<%= message.sent_by_current_user?(current_user) ? 'self-end' : 'self-start' %> flex space-x-4">
+        <div class="<%= message.sent_by_current_user?(current_user) ? 'self-end' : 'self-start' %> flex space-x-4 m-3">
           <div class="flex-shrink-0 w-16 h-16">
             <% if message.sender.profile.profile_picture_public_id.present? %>
               <img class="w-full h-full rounded-full" src="<%= cl_image_path(message.sender.profile.profile_picture_public_id, width: 64, height: 64, crop: :fill) %>" alt="Profile Picture">

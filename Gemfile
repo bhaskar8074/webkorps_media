@@ -51,6 +51,12 @@ gem "tailwindcss-rails"
 # Gemfile
 gem 'devise'
 
+gem 'rails-erd'
+
+# cancancan
+
+gem 'cancancan'
+
 # cloudinary
 gem 'cloudinary'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
