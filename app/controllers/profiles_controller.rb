@@ -12,7 +12,7 @@ class ProfilesController < ApplicationController
     @accepted_request_sender_ids = Friendship.where(friend_id: current_user.id, status: 'accepted').pluck(:user_id)
     @exclude_ids = @request_sender_ids + @accepted_request_sender_ids
     @profiles = @all_profiles.where.not(user_id: @exclude_ids)
-    @friend_count = current_user.friends.count
+    @friend_count = current_user.friendships.where(status: "accepted").count
   end 
 
   def edit

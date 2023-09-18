@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
+  get "posts" => 'posts#index'
+  get 'posts/create'
   get 'friends/create'
   get 'friends/destroy'
   get "friends" => "friends#friends"
   get "users" => "user#index"
+  resources :posts, only: [:new, :index, :create]
   delete '/user/:id', to: 'user#destroy', as: 'delete_user'
   devise_for :users
   resource :profile, only: [ :show, :edit, :update] do
