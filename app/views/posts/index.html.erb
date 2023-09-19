@@ -15,8 +15,12 @@
       </div>
 
       <div class="mb-4">
-        <%= f.label :visbility, class: "block text-gray-700 font-semibold mb-1"%>
-        <%= f.select :visbility, Post.visbilities.keys.map { |visbility| [Post.visbilities[visbility], visbility] }%>
+        <%= f.label :visibility, class: "block text-gray-700 font-semibold mb-1"%>
+        <select name="post[visibility]">
+          <option value="see_by_public">Public</option>
+          <option value="see_by_friends">Friends</option>
+          <option value="only_by_me">Private</option>
+        </select>
       </div>
       <%= f.submit 'Upload Post' %>
     <%end%>

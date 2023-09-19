@@ -3,7 +3,6 @@ class FriendsController < ApplicationController
 
   def friends
     @friends_ids= current_user.friendships.where(status: "accepted").pluck(:friend_id)
-    #p "*********************************************#{@friends_ids.inspect}"
     @user_profiles = Profile.where(user_id: @friends_ids)
     
   end
