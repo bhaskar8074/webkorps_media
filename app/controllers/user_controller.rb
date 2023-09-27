@@ -6,9 +6,12 @@ class UserController < ApplicationController
     end
 
     def destroy
-        debugger
         @user = User.find(params[:id])
-        @user.destroy
+        Friendship.where(friend_id: @user.id).destroy_all
+        Friendship.where(user_id: @user.id).destroy_all
+        if @user.destroy
+            redirect_to friend_requests_friends_path
+        end
     end
 
     private 

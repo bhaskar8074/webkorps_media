@@ -1,0 +1,25 @@
+<%= render "shared/header" %>
+<div class="min-h-screen bg-gradient-to-r from-purple-300 to-blue-200">
+  
+  <div class="max-w-md mx-auto pt-4">
+    <%= paginate @posts%>
+    <%= search_form_for @q do |f| %>
+     <div class="flex items-center border-t border-gray-300 py-2">
+      <%= f.search_field :caption_or_user_profile_first_name_cont, placeholder: "search by caption or name" , class: "block w-full h-12 px-4 rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"%>
+      <%= f.submit "Search", class: "text-blue-500 font-semibold hover:text-blue-600 ml-4"%>
+    </div>
+    <% end %>
+    <% @posts.each do |post| %>
+      <div class="p-4 border border-gray-200 rounded shadow-md mb-4">
+        <div class="flex items-center mb-2">
+          <img class="w-12 h-12 rounded-full" src="<%= cl_image_path(post.user.profile.profile_picture_public_id, width: 48, height: 48, crop: :fill) %>" alt="Profile Picture">
+          <p class="ml-2 text-lg font-semibold"><%= post.user.profile.first_name %></p>
+        </div>
+        <img src="<%= post.post_img %>" alt="Post Image" class="w-full h-auto mb-2 rounded-lg">
+         <%= render "posts/post_features", post: post%>
+        <p class="text-base"><%= post.caption %></p>
+        <p class="text-sm text-gray-600"><%= time_ago_in_words(post.created_at) %> Ago</p>
+      </div>
+    <% end %>
+  </div>
+</div>
