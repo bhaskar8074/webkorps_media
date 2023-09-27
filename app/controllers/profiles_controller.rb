@@ -37,8 +37,6 @@ class ProfilesController < ApplicationController
   def send_friend_request
     friend = current_user
     friendship = User.find(params[:id]).friendships.build(friend: friend, status: 'pending')
-    p "******#{friend}"
-    p "*****#{friendship.inspect}"
     if friendship.save
       flash[:notice] = "Friend request sent to #{friend.profile.first_name}."
     else
