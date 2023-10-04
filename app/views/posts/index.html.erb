@@ -12,14 +12,16 @@
     <% @posts.each do |post| %>
       <div class="p-4 border border-gray-200 rounded shadow-md mb-4">
         <div class="flex items-center mb-2">
-          <img class="w-12 h-12 rounded-full" src="<%= cl_image_path(post.user.profile.profile_picture_public_id, width: 48, height: 48, crop: :fill) %>" alt="Profile Picture">
+          <img class="w-12 h-12 rounded-full" src="<%= cl_image_path(post.user.profile.profile_picture_public_id, width: 48, height: 48, crop: :fill) %>" alt="Profile Picture" onclick="togglelike">
           <p class="ml-2 text-lg font-semibold"><%= post.user.profile.first_name %></p>
         </div>
         <img src="<%= post.post_img %>" alt="Post Image" class="w-full h-auto mb-2 rounded-lg">
-         <%= render "posts/post_features", post: post%>
+        <%= render "posts/post_features", post: post%>
         <p class="text-base"><%= post.caption %></p>
         <p class="text-sm text-gray-600"><%= time_ago_in_words(post.created_at) %> Ago</p>
       </div>
     <% end %>
   </div>
 </div>
+
+
