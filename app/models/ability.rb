@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# ability class
 class Ability
   include CanCan::Ability
 
@@ -9,6 +10,7 @@ class Ability
     #   return unless user.present?
     #   can :read, :all
     return unless user.admin?
+
     can :read, User
     can :destroy, User
     #
