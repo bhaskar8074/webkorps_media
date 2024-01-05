@@ -51,6 +51,7 @@ gem 'bootsnap', require: false
 gem 'tailwindcss-rails'
 
 # Gemfile
+
 gem 'devise'
 
 gem 'rails-erd'
@@ -62,7 +63,7 @@ gem 'cancancan'
 # cloudinary
 gem 'cloudinary'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 
 # kaminari
 gem 'kaminari'
@@ -72,9 +73,19 @@ gem 'ransack'
 
 gem 'jsbundling-rails'
 
+gem 'fear'
+
+# Gemfile
+gem 'trix'
+
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
 end
 
 group :development do

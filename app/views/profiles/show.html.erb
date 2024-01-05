@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="flex items-center justify-between">
-          <p class="text-gray-600">Friends: <%= @friend_count %></p>
+          <p class="text-gray-600">Friends: <%= Profile.accept_friends(current_user) %></p>
       </div>
       <div class="flex items-center justify-between">
         <p class="text-gray-600 font-semibold"><%= current_user.role %></p>

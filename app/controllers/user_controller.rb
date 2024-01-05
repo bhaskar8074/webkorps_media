@@ -10,11 +10,11 @@ class UserController < ApplicationController
 
   def destroy
     @user = User.find(params[:id])
-    Friendship.where(friend_id: @user.id).destroy_all
-    Friendship.where(user_id: @user.id).destroy_all
-    return unless @user.destroy
-
-    redirect_to friend_requests_friends_path
+    ActiveRecord::Base.transaction do
+      Friendship.where(friend_id: @user.id).destroy_all
+      Friendship.where(user_id: @user.id).destroy_all
+      redirect_to friend_requests_friends_path if @user.destroy
+    end
   end
 
   private

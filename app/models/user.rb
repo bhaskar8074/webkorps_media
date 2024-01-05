@@ -2,6 +2,7 @@
 
 # user model
 class User < ApplicationRecord
+  validates_presence_of :email
   has_one :profile, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

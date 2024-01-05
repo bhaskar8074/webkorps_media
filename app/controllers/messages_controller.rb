@@ -3,20 +3,20 @@
 # messages controller
 class MessagesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_messages_services
 
   def show
-    @receiver = User.find(params[:id])
-    @messages = Message.where(
-      '(sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)',
-      current_user.id, @receiver.id, @receiver.id, current_user.id
-    ).order(created_at: :asc)
+    @receiver, @messages = @messages_service.fetch_messages
   end
 
   def create
-    @message = current_user.sent_messages.build(message_params)
+    @message = @messages_service.create_message
 
-    return unless @message.save
+    return unless @message.valid?
 
+    ChatChannel.broadcast_to(@message.receiver, {
+                               message: @message
+                             })
     redirect_to message_path(@message.receiver)
   end
 
@@ -24,7 +24,7 @@ class MessagesController < ApplicationController
 
   private
 
-  def message_params
-    params.permit(:content, :receiver_id)
+  def set_messages_services
+    @messages_service = MessagesService.new(current_user, params)
   end
 end

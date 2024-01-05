@@ -2,18 +2,11 @@
 
 # posts controller
 class PostsController < ApplicationController
-  def friends
-    @friends = current_user.friendships.where(status: 'accepted')
-  end
+  before_action :set_posts_service
 
   def index
-    friends
     @q = Post.ransack(params[:q])
-    @posts = @q.result.where(visibility: 'see_by_public')
-               .or(@q.result.where(visibility: 'see_by_friends', user_id: @friends.pluck(:friend_id)))
-               .order(created_at: 'desc')
-               .page(params[:page])
-               .per(3)
+    @posts = @post_service.get_posts(@q, params)
   end
 
   def new
@@ -21,17 +14,14 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = current_user.posts.build(post_params)
-    file = params[:post][:post_img].present?
-    return unless file
+    return unless @post_service.create_post(params)
 
-    cloudinary_upload = Cloudinary::Uploader.upload(params[:post][:post_img])
-    @post.post_img = cloudinary_upload['secure_url']
+    redirect_to posts_path
   end
 
   private
 
-  def post_params
-    params.require(:post).permit(:caption, :post_img, :visibility)
+  def set_posts_service
+    @post_service = PostsService.new(current_user)
   end
 end

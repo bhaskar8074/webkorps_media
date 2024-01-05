@@ -3,6 +3,7 @@
 # likes_controller
 class LikesController < ApplicationController
   before_action :set_current_post
+  before_action :set_likes_service
 
   def update_likes
     respond_to do |format|
@@ -17,15 +18,15 @@ class LikesController < ApplicationController
   end
 
   def toggle_like
-    if (@like = @post.likes.find_by(user_id: current_user.id))
-      @like.destroy
-    else
-      @post.likes.create(user: current_user)
-    end
+    @likes_service.toggle_like(@post)
     update_likes
   end
 
   private
+
+  def set_likes_service
+    @likes_service = LikesService.new(current_user)
+  end
 
   def set_current_post
     @post = Post.find(params[:post_id])

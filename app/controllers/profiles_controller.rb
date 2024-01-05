@@ -4,21 +4,14 @@
 class ProfilesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_profile
+  before_action :set_profiles_service
 
   def index
     @profiles = Profile.all
   end
 
-  def exclude_ids
-    @request_sender_ids = Friendship.where(friend_id: current_user.id, status: 'pending').pluck(:user_id)
-    @accepted_request_sender_ids = Friendship.where(friend_id: current_user.id, status: 'accepted').pluck(:user_id)
-    @exclude_ids = @request_sender_ids + @accepted_request_sender_ids
-  end
-
   def show
-    @all_profiles = Profile.where.not(user_id: current_user.id)
-    exclude_ids
-    @profiles = @all_profiles.where.not(user_id: @exclude_ids)
+    @profiles = @profiles_service.visible_profiles
     @friend_count = current_user.friendships.where(status: 'accepted').count
   end
 
@@ -28,12 +21,7 @@ class ProfilesController < ApplicationController
     @profile_pic = params[:profile][:profile_picture]
     return unless @profile_pic
 
-    uploaded_file = @profile_pic
-    cloudinary_response = Cloudinary::Uploader.upload(uploaded_file, transformation: [
-                                                        { width: 800, height: 800, crop: :limit },
-                                                        { quality: 'auto:low' }
-                                                      ])
-    @profile.update(profile_picture_public_id: cloudinary_response['public_id'])
+    @profiles_service.update_profile_picture(@profile, @profile_pic)
   end
 
   def update
@@ -46,16 +34,17 @@ class ProfilesController < ApplicationController
   end
 
   def send_friend_request
-    friend = current_user
-    friendship = User.find(params[:id]).friendships.build(friend: friend, status: 'pending')
+    friendship = @profiles_service.send_friend_request(params)
     if friendship.save
-      flash[:notice] = "Friend request sent to #{friend.profile.first_name}."
+      flash[:notice] = "Friend request sent to #{current_user.profile.first_name}."
     else
       flash[:alert] = 'Unable to send friend request.'
     end
 
-    redirect_to profile_path(friend)
+    redirect_to profile_path(current_user)
   end
+
+  private
 
   def set_profile
     @profile = current_user.profile || current_user.build_profile
@@ -63,5 +52,9 @@ class ProfilesController < ApplicationController
 
   def profile_params
     params.require(:profile).permit(:first_name, :last_name, :bio)
+  end
+
+  def set_profiles_service
+    @profiles_service = ProfilesService.new(current_user)
   end
 end
