@@ -1,0 +1,77 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ .pagination {
+    background: #009ef3a5;
+    border: 0.5px solid black;
+    border-radius: 5px;
+    padding: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .page {
+    transition: .5s;
+    margin-right: 17px;
+    border: 0.5px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+ }
+
+ 
+
+ .first,.prev,.next,.last{
+    transition: .5s;
+    margin-right: 17px;
+    border: 0.5px solid black;
+    border-radius: 5px;
+    padding: 5px;
+ }
+
+ .page.current {
+    color: red;
+    border-color: red;
+ }
+
+ .page:hover {
+    background-color: black;
+    color: white;
+ }
+
+
+ .next:hover {
+    background-color: black;
+    color: white;
+ }
+
+ .page.current {
+    color: red;
+    border-color: red;
+ }
+
+ .last:hover {
+    background-color: black;
+    color: white;
+ }
+
+ .red-color{
+    color : red;
+ }
+ 

@@ -1,0 +1,22 @@
+<header class="bg-blue-900 text-white py-6">
+  <div class="container mx-auto flex items-center justify-between">
+    <a href="/">
+    <img src="https://www.webkorps.com/assets/images/logo.jpg" alt="logo" class="w-48 opacity-50 hover:opacity-80"/>
+    </a>
+    <nav class="space-x-3">
+      <a href="/" class="hover:text-blue-300">Home</a>
+      <a href="/profile" class="hover:text-blue-300">Profile</a>
+      <a href="/friends/friend_requests" class="hover:text-blue-300">Requests</a>
+      <a href="/friends" class="hover:text-blue-300">Friends</a>
+      <% if current_user.present?%>
+        <%if current_user.role=="admin"%>
+          <a href="/users" class="hover:text-blue-300">Users</p>
+        <%end%>
+      <%end%>
+      <a href="/posts/new" class="hover:text-blue-300">create post</a>
+    </nav>
+    <% if user_signed_in? %>
+        <%= link_to 'Logout', destroy_user_session_path,  data: { "turbo-method": :delete }, class: 'bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+      <% end %>
+  </div>
+</header>
