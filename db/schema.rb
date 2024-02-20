@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_04_204832) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_12_161811) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -24,8 +24,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_204832) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.integer "record_id", null: false
-    t.integer "blob_id", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
@@ -44,9 +44,31 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_204832) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "blog_posts", force: :cascade do |t|
+    t.string "title"
+    t.text "content"
+    t.integer "author_id", null: false
+    t.integer "category_id", null: false
+    t.string "slug"
+    t.string "tags"
+    t.string "featured_image_url"
+    t.integer "status", default: 0
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_blog_posts_on_author_id"
+    t.index ["category_id"], name: "index_blog_posts_on_category_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "friendships", force: :cascade do |t|
@@ -97,6 +119,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_204832) do
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.integer "status"
+    t.integer "priority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -106,12 +137,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_204832) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "role", default: "user"
+    t.string "provider"
+    t.string "uid"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "blog_posts", "categories"
+  add_foreign_key "blog_posts", "users", column: "author_id"
   add_foreign_key "friendships", "users"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"

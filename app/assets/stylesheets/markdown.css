@@ -1,0 +1,35 @@
+/* CSS to style the code block */
+.highlight {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 20px; /* Add some spacing between code blocks */
+}
+
+.highlight pre {
+  margin: 0;
+}
+
+.highlight pre code {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Styles for syntax highlighting */
+.k {
+  color: #0077cc; /* Keyword color */
+}
+
+.nf {
+  color: #22863a; /* Function/Method name color */
+}
+
+.nb {
+  color: #aa0000; /* Built-in function color */
+}
+
+.s2 {
+  color: #183691; /* String color */
+}

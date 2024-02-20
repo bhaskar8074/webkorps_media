@@ -8,13 +8,22 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   has_many :likes, dependent: :destroy
   has_many :posts, dependent: :destroy
+  has_many :blog_posts,foreign_key: 'author_id', dependent: :destroy
   has_many :friendships, dependent: :destroy
   has_many :friends, class_name: 'User', dependent: :destroy, through: :friendships, source: :friend
   has_many :sent_messages, class_name: 'Message', dependent: :destroy, foreign_key: 'sender_id'
   has_many :received_messages, class_name: 'Message', dependent: :destroy, foreign_key: 'receiver_id'
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,:omniauthable, omniauth_providers: [:google_oauth2]
+
+  def self.from_omniauth(auth)
+    # debugger
+    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+      user.email = auth.info.email
+      user.password = Devise.friendly_token[0, 20]
+    end
+  end
 
   def admin?
     role == 'admin'

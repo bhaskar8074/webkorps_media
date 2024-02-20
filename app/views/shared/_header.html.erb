@@ -20,3 +20,12 @@
       <% end %>
   </div>
 </header>
+
+<% if notice %>
+  <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 bg-green-300 bg-opacity-75 text-white p-4 rounded-md">
+    <%= flash[:notice] %>
+    <button onclick="this.parentElement.style.display='none'" class="float-right text-white">&times;</button>
+  </div>
+<% end %>
+
+

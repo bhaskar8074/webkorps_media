@@ -7,6 +7,7 @@ class FriendsController < ApplicationController
 
   def index
     @user_profiles = @friends_service.friends
+
   end
 
   def accept_friend_request

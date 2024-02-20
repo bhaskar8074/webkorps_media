@@ -1,0 +1,114 @@
+<%= render "shared/header" %>
+<div class="container mx-auto mt-8">
+  <h2 class="text-3xl font-bold mb-6">Task Tracking</h2>
+
+  <div class="flex">
+    <div class="w-1/3 bg-gray-100 rounded-lg p-4 mr-4" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h3 class="text-xl font-semibold mb-4">Todo</h3>
+      <% @todo_tasks.each do |task| %>
+        <div id="task-<%= task.id %>" class="task bg-white rounded-lg p-2 mb-2 cursor-move" draggable="true" ondragstart="drag(event)" data-task-id="<%= task.id %>">
+          <p><%= task.title %></p>
+          <div class="inline-block <%= priorityColor(task.priority) %> rounded-md p-1 text-center">
+              <p><%= task.priority %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="w-1/3 bg-gray-100 rounded-lg p-4 mr-4" id="inProgress" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h3 class="text-xl font-semibold mb-4">In Progress</h3>
+      <% @in_progress_tasks.each do |task| %>
+        <div id="task-<%= task.id %>" class="task bg-white rounded-lg p-2 mb-2 cursor-move" draggable="true" ondragstart="drag(event)" data-task-id="<%= task.id %>">
+          <p><%= task.title %></p>
+          <div class="inline-block <%= priorityColor(task.priority) %> rounded-md p-1 text-center">
+            <p><%= task.priority %></p>
+          </div>
+          
+        </div>
+      <% end %>
+    </div>
+
+    <div class="w-1/3 bg-gray-100 rounded-lg p-4" id="done" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h3 class="text-xl font-semibold mb-4">Done</h3>
+      <% @done_tasks.each do |task| %>
+        <div id="task-<%= task.id %>" class="task bg-white rounded-lg p-2 mb-2 cursor-move" draggable="true" ondragstart="drag(event)" data-task-id="<%= task.id %>">
+          <p><%= task.title %></p>
+          <div class="inline-block <%= priorityColor(task.priority) %> rounded-md p-1 text-center">
+            <p><%= task.priority %></p>
+          </div>
+          
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+
+  function drag(event) {
+    console.log("I am drag")
+    event.dataTransfer.setData("text/plain", event.target.dataset.taskId);
+  }
+
+  function updateTaskStatus(taskId, status) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    const url = `/tasks/${taskId}`;
+
+    // Send AJAX request to update task status
+    fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+      },
+      body: JSON.stringify({ status: status })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      // Handle successful response, if needed
+      console.log('Task status updated successfully');
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+  }
+
+  function drop(event) {
+    console.log("Hi I am drop")
+    event.preventDefault();
+    const taskId = event.dataTransfer.getData("text/plain");
+    const draggedElement = document.getElementById(`task-${taskId}`);
+    const targetColumn = event.target.closest('.bg-gray-100');
+    console.log(targetColumn)
+    // i am getting draggedElement is nul i do not have any idea why it happens can you solve this issue 
+    console.log(draggedElement)
+    if (targetColumn && draggedElement) {
+      // Update task status based on the target container
+      let status;
+      switch (targetColumn.id) {
+        case "todo":
+          status = "todo";
+          break;
+        case "inProgress":
+          status = "in_progress";
+          break;
+        case "done":
+          status = "done";
+          break;
+      }
+
+      // Send AJAX request to update task status
+      updateTaskStatus(taskId, status);
+
+      // Move the dragged element to the target container
+      targetColumn.appendChild(draggedElement);
+    }
+  }
+</script>
+
+
